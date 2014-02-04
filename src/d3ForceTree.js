@@ -860,31 +860,31 @@
          //Todo: Fix this commented out code?
 
          /* right now these are getting stuck in the off position
-  	// can't log an ordinal color scale...
-  	if(  statics.getOrdinalScales()[ aDocument.getElementById("sizeByWhat").value] != null )  
-  	{
-  		aBox = aDocument.getElementById("logSize");
-  		aBox.checked=false;
-  		aBox.enabled=false;
-  	}
-  	else
-  	{
-  		aDocument.getElementById("logSize").enabled=true;
-  	}
-  	
-  	// can't log an ordinal color scale...
-  	if(  statics.getOrdinalScales()[ aDocument.getElementById("colorByWhat").value] != null )  
-  	{
-  		aBox = aDocument.getElementById("logColor");
-  		aBox.checked=false;
-  		aBox.enabled=false;
-  	}
-  	else
-  	{
-  		aBox = aDocument.getElementById("logColor").enabled=true;
-  	}
-  	*/
-<<<<<<< HEAD
+    // can't log an ordinal color scale...
+    if(  statics.getOrdinalScales()[ aDocument.getElementById("sizeByWhat").value] != null )  
+    {
+        aBox = aDocument.getElementById("logSize");
+        aBox.checked=false;
+        aBox.enabled=false;
+    }
+    else
+    {
+        aDocument.getElementById("logSize").enabled=true;
+    }
+    
+    // can't log an ordinal color scale...
+    if(  statics.getOrdinalScales()[ aDocument.getElementById("colorByWhat").value] != null )  
+    {
+        aBox = aDocument.getElementById("logColor");
+        aBox.checked=false;
+        aBox.enabled=false;
+    }
+    else
+    {
+        aBox = aDocument.getElementById("logColor").enabled=true;
+    }
+    */
+         << << << < HEAD
 
          dirty = true;
          this.update()
@@ -956,43 +956,58 @@
          return !isNaN(parseFloat(n)) && isFinite(n);
      }
 
-     //Todo: Continue commenting here.
+     //Function to get a scale based on data given and if an xAxis is given
      this.getAVal = function(d, xAxis) {
+         //if the graph is a force tree...
          if (graphType == "ForceTree") {
+             //if there's an xAxis, return d.x; otherwise return d.y
              return xAxis ? d.x : d.y;
          }
 
-         d = d.parentDataNode;
+         d = d.parentDataNode; //get the parent node of d
 
-         chosen = null;
+         chosen = null; //initialize chosen to null
 
+         //if there is an xAxis...
          if (xAxis) {
+             //set chosen to be the "scatterX" value
              chosen = thisDocument.getElementById("scatterX").value;
          } else {
+             //if there is not an xAxis, set chosen to be the "scatterY" value
              chosen = thisDocument.getElementById("scatterY").value;
          }
 
+         //if chosen is equal to "circleX"...
          if (chosen == "circleX")
+         //return the xMap[thisID] of d
              return d.xMap[thisID];
 
+         //if chosen is equal to "circleY"...
          if (chosen == "circleY")
+         //return the yMap[thisID] of d
              return d.yMap[thisID];
 
-         // quantitative scale 
+         // quantitative scale
+         // if the chosen value in statics.getRanges() is not null... 
          if (statics.getRanges()[chosen] != null) {
+             //initialize aRange to statics.getRanges() at the chosen value
              var aRange = statics.getRanges()[chosen];
-             var aScale = d3.scale.linear().domain(aRange).
-             range([0, xAxis ? w : h]);
+             //initialize aScale to the domain of aRange and the range (between 0 and the width if there is an xAxis, otherwise b/t 0 and the height)
+             var aScale = d3.scale.linear().domain(aRange).range([0, xAxis ? w : h]);
+             //return the aScale of d at the chosen value
              return aScale(d[chosen]);
          } else {
+             //get the ordinalScale at the chosen value
              statics.getOrdinalScales()[chosen].
+             //set the range (between 0 and the width if there is an xAxis, otherwise b/t 0 and the height)
              range([0, xAxis ? w : h]);
-
+             //return the ordinal scale of getOrdinalScales()[chosen](d[chosen])
              return statics.getOrdinalScales()[chosen](d[chosen]);
          }
 
      }
 
+     //Function to add an Axis
      this.addAxis = function(chosen, isXAxis) {
          if (chosen == "circleX" || chosen == "circleY")
              return;
@@ -1018,6 +1033,7 @@
          }
      }
 
+     //Function to get a radius value
      this.getRadiusVal = function(d) {
          var propToSize = aDocument.getElementById("sizeByWhat").value
          var returnVal = aDocument.getElementById("maxSize").value;
@@ -1070,6 +1086,7 @@
      }
      var updateNum = 0;
 
+     //Function to toggle the visibility of side bars
      this.toggleVisibilityOfSidebars = function() {
          var registered = statics.getGoObjects();
          for (id in registered)
@@ -1101,6 +1118,7 @@
 
      }
 
+     //Function to handle keyboard events
      this.handleKeyboardEvent = function(e) {
          // modded from http://stackoverflow.com/questions/4368036/how-to-listener-the-keyboard-type-text-in-javascript
          e = e || thisWindow.event;
@@ -1145,6 +1163,8 @@
 
 
      // from http://stackoverflow.com/questions/7295843/allow-only-numbers-to-be-typed-in-a-textbox
+
+     //Function to check to see if an event is a number
      this.isNumber = function(evt) {
          evt = (evt) ? evt : window.event;
          var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -1158,6 +1178,7 @@
          return true;
      }
 
+     //Function to update
      this.update = function() {
          if (!initHasRun)
              return;
@@ -1250,7 +1271,6 @@
 
 
              // Restart the force layout.
-
              if (graphType == "ForceTree") {
                  force.nodes(filteredNodes);
 
@@ -1309,6 +1329,7 @@
                  node.call(force.drag);
              }
 
+             //Function to update node-links text
              function updateNodesLinksText() {
                  //console.log("tick " + dragging);
 
@@ -1358,70 +1379,70 @@
                      } else {
                          /* radial labels: todo: this should be an option
 =======
-  	
-  	dirty = true;
-  	this.update()
+    
+    dirty = true;
+    this.update()
   }
 
   
 
 this.getLabelText = function(d)
-{	
-	if( d.marked == false && aDocument.getElementById("labelOnlyTNodes").checked  )
-		return "";
-	
-	var returnString ="";
-	
-	for( var propertyName in nodes[0])
-	{
-		var aCheckBox = aDocument.getElementById("label" + propertyName);
-		if( aCheckBox != null &&  aCheckBox.checked)
-		{
-			returnString += d[propertyName] + " ";
-		}
-	}
-	
-	if(  aDocument.getElementById("cicleLabelScheme").checked  && graphType=="ForceTree" )
-	{
+{   
+    if( d.marked == false && aDocument.getElementById("labelOnlyTNodes").checked  )
+        return "";
+    
+    var returnString ="";
+    
+    for( var propertyName in nodes[0])
+    {
+        var aCheckBox = aDocument.getElementById("label" + propertyName);
+        if( aCheckBox != null &&  aCheckBox.checked)
+        {
+            returnString += d[propertyName] + " ";
+        }
+    }
+    
+    if(  aDocument.getElementById("cicleLabelScheme").checked  && graphType=="ForceTree" )
+    {
 
-			if( circleDraws[d.nodeDepth] ==  returnString)	
-			{
-				return "";	
-			}
-			
-	}
-	
-	circleDraws[d.nodeDepth] =  "" +  returnString;
-	
-	
-	return returnString;	
+            if( circleDraws[d.nodeDepth] ==  returnString)  
+            {
+                return "";  
+            }
+            
+    }
+    
+    circleDraws[d.nodeDepth] =  "" +  returnString;
+    
+    
+    return returnString;    
 }
 
 this.myFilterNodes = function(d)
 {
-	 if( d.parentDataNode.doNotShow == false)
-	 	return true;
-	 	
-	 return false;
+     if( d.parentDataNode.doNotShow == false)
+        return true;
+        
+     return false;
 }
 
 this.myFilterLinks= function(d)
 {
-	 if( d.source.parentDataNode.doNotShow == true|| d.target.parentDataNode.doNotShow == true)
-      		return false;
-      	
+     if( d.source.parentDataNode.doNotShow == true|| d.target.parentDataNode.doNotShow == true)
+            return false;
+        
       return true;
-      		
+            
 }
 
 this.gravityAdjust = function()
 {
-		if  (graphType !=  "ForceTree")		
-		{
-			myGo.setInitialPositions();
-		}	
-		
-		myGo.redrawScreen();
+        if  (graphType !=  "ForceTree")     
+        {
+            myGo.setInitialPositions();
+        }   
+        
+        myGo.redrawScreen();
 }
 
 // from http://stackoverflow.com/questions/18082/validate-numbers-in-javascript-isnumeric
@@ -1431,250 +1452,250 @@ this.isNumber = function (n) {
 
 this.getAVal = function (d, xAxis)
 {
-	if( graphType == "ForceTree" )
-	{
-		return xAxis? d.x: d.y;	
-	}
-	
-	d = d.parentDataNode;
-	
-	chosen = null;
-	
-	if( xAxis)
-	{
-		chosen = thisDocument.getElementById("scatterX").value;
-	}
-	else
-	{
-		chosen = thisDocument.getElementById("scatterY").value;
-	}
-	
-	if( chosen == "circleX" )
-		return d.xMap[thisID];
-		
-	if( chosen == "circleY" ) 
-		return d.yMap[thisID];
-		
-	// quantitative scale 
-	if( statics.getRanges()[chosen] != null)
-	{	
-		var aRange = statics.getRanges()[chosen];
-		var aScale = d3.scale.linear().domain(aRange).
-			range([0, xAxis ? w : h]);
-		return aScale(d[chosen]);
-	}
-	else
-	{
-		statics.getOrdinalScales()[chosen].
-			range([0, xAxis ? w : h]); 
-			
-		return statics.getOrdinalScales()[chosen](d[chosen]);
-	}
-	
+    if( graphType == "ForceTree" )
+    {
+        return xAxis? d.x: d.y; 
+    }
+    
+    d = d.parentDataNode;
+    
+    chosen = null;
+    
+    if( xAxis)
+    {
+        chosen = thisDocument.getElementById("scatterX").value;
+    }
+    else
+    {
+        chosen = thisDocument.getElementById("scatterY").value;
+    }
+    
+    if( chosen == "circleX" )
+        return d.xMap[thisID];
+        
+    if( chosen == "circleY" ) 
+        return d.yMap[thisID];
+        
+    // quantitative scale 
+    if( statics.getRanges()[chosen] != null)
+    {   
+        var aRange = statics.getRanges()[chosen];
+        var aScale = d3.scale.linear().domain(aRange).
+            range([0, xAxis ? w : h]);
+        return aScale(d[chosen]);
+    }
+    else
+    {
+        statics.getOrdinalScales()[chosen].
+            range([0, xAxis ? w : h]); 
+            
+        return statics.getOrdinalScales()[chosen](d[chosen]);
+    }
+    
 }
-		
+        
 this.addAxis = function(chosen, isXAxis)
 {
-	if( chosen == "circleX" || chosen == "circleY")
-		return;
-		
-	if( statics.getRanges()[chosen] != null)
-	{	
-		if( isXAxis)
-		{
-				var aRange = statics.getRanges()[chosen];
-		var aScale = d3.scale.linear().domain(aRange).
-					range([0, w]);
-		var xAxis = d3.svg.axis()
+    if( chosen == "circleX" || chosen == "circleY")
+        return;
+        
+    if( statics.getRanges()[chosen] != null)
+    {   
+        if( isXAxis)
+        {
+                var aRange = statics.getRanges()[chosen];
+        var aScale = d3.scale.linear().domain(aRange).
+                    range([0, w]);
+        var xAxis = d3.svg.axis()
                   .scale(aScale)
                   .orient( "bottom");
         vis.append("svg:svg").call(xAxis); 
-		}
-		else
-		{
-		var aRange = statics.getRanges()[chosen];
-		var aScale = d3.scale.linear().domain(aRange).
-					range([0, h]);
-		var yAxis = d3.svg.axis()
+        }
+        else
+        {
+        var aRange = statics.getRanges()[chosen];
+        var aScale = d3.scale.linear().domain(aRange).
+                    range([0, h]);
+        var yAxis = d3.svg.axis()
                   .scale(aScale)
                   .orient( "right");
         vis.append("svg:svg").call(yAxis); 
-		}
-	  }
+        }
+      }
 }
 
 this.getRadiusVal= function(d)
 {
-	var propToSize = aDocument.getElementById("sizeByWhat").value
-	var returnVal = aDocument.getElementById("maxSize").value;
-	var minValue = aDocument.getElementById("minSize").value * 1.0 ;
-	var maxValue= aDocument.getElementById("maxSize").value * 1.0 ;
-	var aRange = maxValue- minValue;
-	
-	
-	// quantitative values
-	if( statics.getRanges()[propToSize] != null)
-	{
-		if( aDocument.getElementById("logSize").checked) 
-		{
-			if( d[propToSize] >0) // a p-value of zero yields a maximum sized radius
-			{
-				maxScale = Math.log(statics.getRanges()[propToSize][1]) / Math.LN10; 
-				var aValue = Math.log( d[propToSize]  ) / Math.LN10;
-				
-				var partial = aValue / maxScale;
-				partial = partial * aRange;
-				returnVal = minValue + partial;
-			}
-		}
-		else
-		{
-			var aValue = 1.0 * d[propToSize] ;
-			
-			var partial = ( aValue- statics.getRanges()[propToSize][0] )
-							/ (statics.getRanges()[propToSize][1] - statics.getRanges()[propToSize][0]);
-			
-			partial = partial *  aRange;
-			returnVal = minValue +  partial;	
-		}
-			
-	}
-	else //ordinal values 
-	{
-		statics.getOrdinalScales()[propToSize].range(minValue,maxValue); 
-  					
-		returnVal = statics.getOrdinalScales()[propToSize](d[propToSize]);
-		
-	}
-	
-	if( aDocument.getElementById("invertSize").checked ) 
-	{
-		returnVal = maxValue- returnVal;
-	}
-	
-	if( returnVal < minValue)
-		returnVal = minValue;
-		
-	if( returnVal > maxValue)
-		returnVal = maxValue;
-	
-	return returnVal;
-	
+    var propToSize = aDocument.getElementById("sizeByWhat").value
+    var returnVal = aDocument.getElementById("maxSize").value;
+    var minValue = aDocument.getElementById("minSize").value * 1.0 ;
+    var maxValue= aDocument.getElementById("maxSize").value * 1.0 ;
+    var aRange = maxValue- minValue;
+    
+    
+    // quantitative values
+    if( statics.getRanges()[propToSize] != null)
+    {
+        if( aDocument.getElementById("logSize").checked) 
+        {
+            if( d[propToSize] >0) // a p-value of zero yields a maximum sized radius
+            {
+                maxScale = Math.log(statics.getRanges()[propToSize][1]) / Math.LN10; 
+                var aValue = Math.log( d[propToSize]  ) / Math.LN10;
+                
+                var partial = aValue / maxScale;
+                partial = partial * aRange;
+                returnVal = minValue + partial;
+            }
+        }
+        else
+        {
+            var aValue = 1.0 * d[propToSize] ;
+            
+            var partial = ( aValue- statics.getRanges()[propToSize][0] )
+                            / (statics.getRanges()[propToSize][1] - statics.getRanges()[propToSize][0]);
+            
+            partial = partial *  aRange;
+            returnVal = minValue +  partial;    
+        }
+            
+    }
+    else //ordinal values 
+    {
+        statics.getOrdinalScales()[propToSize].range(minValue,maxValue); 
+                    
+        returnVal = statics.getOrdinalScales()[propToSize](d[propToSize]);
+        
+    }
+    
+    if( aDocument.getElementById("invertSize").checked ) 
+    {
+        returnVal = maxValue- returnVal;
+    }
+    
+    if( returnVal < minValue)
+        returnVal = minValue;
+        
+    if( returnVal > maxValue)
+        returnVal = maxValue;
+    
+    return returnVal;
+    
 }
 var updateNum=0;
 
 this.toggleVisibilityOfSidebars =function()
 {
-	var registered = statics.getGoObjects();
-  	for (id in registered) if (registered[id])
-	{
-		registered[id].getThisDocument().getElementById("sidebar").style.backgroundColor="#ffffff";
-		
-		var aDoc =registered[id].getThisDocument(); 
-		
-		if( aDoc ) 
-		{
-			if( aDocument.getElementById("showLeftControl").checked )
-			{ 
-				aDoc.getElementById("sidebar").style.visibility="visible";
-			}
-			else
-			{
-				aDoc.getElementById("sidebar").style.visibility="hidden";
-			}
-		}
-		else
-		{
-			console.log("Could not get doc for " + id);
-		}
-	}
-	
-	
-	if( aDocument.getElementById("showRightDataPanel").checked ) 
-	{
-		aDocument.getElementById("rightInfoArea").style.visibility="visible";
-		
-	}
-	else
-	{
-		aDocument.getElementById("rightInfoArea").style.visibility="hidden";
-	}
-		
-	aDocument.getElementById("rightInfoArea").style.backgroundColor="#ffffff";
-		
+    var registered = statics.getGoObjects();
+    for (id in registered) if (registered[id])
+    {
+        registered[id].getThisDocument().getElementById("sidebar").style.backgroundColor="#ffffff";
+        
+        var aDoc =registered[id].getThisDocument(); 
+        
+        if( aDoc ) 
+        {
+            if( aDocument.getElementById("showLeftControl").checked )
+            { 
+                aDoc.getElementById("sidebar").style.visibility="visible";
+            }
+            else
+            {
+                aDoc.getElementById("sidebar").style.visibility="hidden";
+            }
+        }
+        else
+        {
+            console.log("Could not get doc for " + id);
+        }
+    }
+    
+    
+    if( aDocument.getElementById("showRightDataPanel").checked ) 
+    {
+        aDocument.getElementById("rightInfoArea").style.visibility="visible";
+        
+    }
+    else
+    {
+        aDocument.getElementById("rightInfoArea").style.visibility="hidden";
+    }
+        
+    aDocument.getElementById("rightInfoArea").style.backgroundColor="#ffffff";
+        
 }
 
 this.handleKeyboardEvent = function(e)
 {
-	// modded from http://stackoverflow.com/questions/4368036/how-to-listener-the-keyboard-type-text-in-javascript
-	e = e || thisWindow.event;
+    // modded from http://stackoverflow.com/questions/4368036/how-to-listener-the-keyboard-type-text-in-javascript
+    e = e || thisWindow.event;
     var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
     if (charCode) 
     {
         if( String.fromCharCode(charCode) == "A" || String.fromCharCode(charCode) == 'a')
         {
-        	thisContext.arrangeForcePlot(true);
+            thisContext.arrangeForcePlot(true);
         }
         else if( String.fromCharCode(charCode) == "T" || String.fromCharCode(charCode) == 't')
         {
-        	thisContext.arrangeForcePlot(false);
+            thisContext.arrangeForcePlot(false);
         }
         else if( String.fromCharCode(charCode) == "L" || String.fromCharCode(charCode) == 'l')
         {
-        	if( thisContext.getParentDocument().getElementById("showLeftControl").checked )
-        	{
-        		thisContext.getParentDocument().getElementById("showLeftControl").checked =false;
-        	}
-        	else
-        	{
-        		thisContext.getParentDocument().getElementById("showLeftControl").checked =true;
-        	}
-        	
-        	
-        	thisContext.toggleVisibilityOfSidebars();
+            if( thisContext.getParentDocument().getElementById("showLeftControl").checked )
+            {
+                thisContext.getParentDocument().getElementById("showLeftControl").checked =false;
+            }
+            else
+            {
+                thisContext.getParentDocument().getElementById("showLeftControl").checked =true;
+            }
+            
+            
+            thisContext.toggleVisibilityOfSidebars();
         }
         else if( String.fromCharCode(charCode) == "R" || String.fromCharCode(charCode) == 'r')
         {
-        	if( thisContext.getParentDocument().getElementById("showRightDataPanel").checked )
-        	{
-        		thisContext.getParentDocument().getElementById("showRightDataPanel").checked =false;
-        	}
-        	else
-        	{
-        		thisContext.getParentDocument().getElementById("showRightDataPanel").checked =true;
-        	}
-        	
-        	thisContext.toggleVisibilityOfSidebars();
+            if( thisContext.getParentDocument().getElementById("showRightDataPanel").checked )
+            {
+                thisContext.getParentDocument().getElementById("showRightDataPanel").checked =false;
+            }
+            else
+            {
+                thisContext.getParentDocument().getElementById("showRightDataPanel").checked =true;
+            }
+            
+            thisContext.toggleVisibilityOfSidebars();
         }
         else if ( String.fromCharCode(charCode) == "V" || String.fromCharCode(charCode) == 'v')
         {
-        	thisContext.hideAndShow();
-        	thisContext.redrawScreen();
+            thisContext.hideAndShow();
+            thisContext.redrawScreen();
         }
         else if ( String.fromCharCode(charCode) == "Q" || String.fromCharCode(charCode) == 'q')
         {
-        	var aVal = parseFloat( aDocument.getElementById("localGravity").value);
-        	aVal = aVal + 0.5;
-        	aDocument.getElementById("localGravity").value = aVal
+            var aVal = parseFloat( aDocument.getElementById("localGravity").value);
+            aVal = aVal + 0.5;
+            aDocument.getElementById("localGravity").value = aVal
         }
         else if ( String.fromCharCode(charCode) == "W" || String.fromCharCode(charCode) == 'w')
         {
-        	var aVal = parseFloat( aDocument.getElementById("localGravity").value);
-        	aVal = aVal - 0.5;
-        	aDocument.getElementById("localGravity").value = aVal
+            var aVal = parseFloat( aDocument.getElementById("localGravity").value);
+            aVal = aVal - 0.5;
+            aDocument.getElementById("localGravity").value = aVal
         }
     }
 }
 
 
 
-	// from http://stackoverflow.com/questions/7295843/allow-only-numbers-to-be-typed-in-a-textbox
-	this.isNumber = function(evt) {
+    // from http://stackoverflow.com/questions/7295843/allow-only-numbers-to-be-typed-in-a-textbox
+    this.isNumber = function(evt) {
 evt = (evt) ? evt : window.event;
 var charCode = (evt.which) ? evt.which : evt.keyCode;
 
 if( charCode == 46)  //decimal places are allowed
-	return true;
+    return true;
 
 if (charCode > 31 && (charCode < 48 || charCode > 57)) {
     return false;
@@ -1684,229 +1705,229 @@ return true;
 
 this.update = function() 
 {
-	if( ! initHasRun )
-		return;
- 	
-	if( dirty ) 
-	{
-		if( animationOn == false && stopOnChild == false)
-		{
-			dataset = thisContext.getDisplayDataset();
-			for( var x=0; x < dataset.nodes.length; x++)
-			{
-				if( ! dataset.nodes[x].userMoved )
-				{
-					dataset.nodes[x].x = dataset.nodes[x].parentDataNode.xMap[thisID]
-					dataset.nodes[x].y = dataset.nodes[x].parentDataNode.yMap[thisID]			  				
-				}
-			}
-		}
-		
-			
-		
-		dirty = false;
-		var anyLabels = false;
-		
-		for( var x=0; x<= statics.getMaxLevel(); x++ )
-		{
-			circleDraws[x] = "";
-		}
-		
-		
-		for( var x=0; ! anyLabels && x < statics.getLabelCheckBoxes().length; x++)
-		{
-			var aCheckBox = aDocument.getElementById(statics.getLabelCheckBoxes()[x]);
-			
-			if( aCheckBox != null) 
-				anyLabels = aCheckBox.checked
-		}
-		
-		var noiseValue = aDocument.getElementById("noiseSlider").value;
-		
-		var numMarked =0;
-  		var numVisible=0;
-	 	for (var i = 0; i < nodes.length; i++)
-	 	{
-	 		nodes[i].marked= false;
-	 		if( ! nodes[i].doNotShow &&  nodes[i].setVisible== true) 
-	 		{
-	 			nodes[i].marked = true;
-		 		numVisible++;
-		 		
-		 		if( nodes[i].children != null) 
-		 		{
-		 			for( var j=0; nodes[i].marked && j < nodes[i].children.length; j++ ) 
-		 			{
-		 				if( ! nodes[i].children[j].doNotShow )
-		 				{
-		 					nodes[i].marked=false;
-		 				}
-		 			}
-		 		}
-		 		
-		 		if( nodes[i].marked == true) 
-		 			numMarked = numMarked + 1
-	 		}
-	 		
-	 		if( addNoise )
-	 		{
-	 			if( firstNoise)
-	 			{
-	 				nodes[i].xMapNoise  = nodes[i].xMap[thisID];
-	 				nodes[i].yMapNoise  = nodes[i].yMap[thisID];
-	 			}
-	 			else
-	 			{
-	 				nodes[i].xMap[thisID]=nodes[i].xMapNoise ;
-	 				nodes[i].yMap[thisID]= nodes[i].yMapNoise;
-	 				
-	 			}
-	 		
-	 			var noiseX = 0.1 * nodes[i].xMap[thisID]* Math.random() * (noiseValue/100);
-	 			var noiseY = 0.1 * nodes[i].yMap[thisID]* Math.random() * (noiseValue/100);
-	 			
-	 			if( Math.random() < 0.5) 
-	 				noiseX = -noiseX;
-	 				
-	 			if( Math.random() < 0.5) 
-	 				noiseY = -noiseY;
-	 				
-	 			nodes[i].xMap[thisID] += noiseX;
-	 			nodes[i].yMap[thisID] += noiseY;
-	 			
-	 		}
-	 	}
-	 	
-	 	if( addNoise) 
-	 		firstNoise = false;
-	 	
-	 	for (var i = 0; i < nodes.length; i++)
-	 	{
-	 		nodes[i].thisNodeColor = this.color(nodes[i]);
-	 		nodes[i].thisNodeRadius = this.getRadiusVal(nodes[i]);
-	 	}	
-		
-		var filteredNodes = thisContext.getDisplayDataset().nodes.filter(thisContext.myFilterNodes)
-		vis.selectAll("text").remove();
-		
-	
-  	// Restart the force layout.
- 	 
- 	 if( graphType == "ForceTree"  ) 
- 	 {
- 		force.nodes(filteredNodes);
- 	      
- 		if(! aDocument.getElementById("hideLinks").checked )
- 		{
- 			links = d3.layout.tree().links(filteredNodes);
- 			force.links(links)  
- 		}
- 		else
- 		{
- 			links = d3.layout.tree().links([]);
- 			force.links(links);
- 		}
- 		
- 		
- 		if(stopOnChild == true || animationOn == true)
- 			force.start().gravity(aDocument.getElementById("gravitySlider").value/100);
- 	 }
- 	 
-	  var node = vis.selectAll("circle.node")
-	      .data(filteredNodes, function(d) {return d.name; } )
-	      .style("fill", function(d) { return d.parentDataNode.thisNodeColor} )
-	      .style("opacity",aDocument.getElementById("opacitySlider").value/100 );
-	
-	
-	  // Enter any new nodes.
-	 node.enter().append("svg:circle").on("click", this.myClick)
-	      .attr("class", "node")
-	      .attr("r", function(d) {  return d.parentDataNode.thisNodeRadius})
-	      .style("fill", function(d) { return d.parentDataNode.thisNodeColor}).
-	      style("opacity",aDocument.getElementById("opacitySlider").value/100 ) 
-	     .on("mouseenter", this.myMouseEnter)
-	      .on("mouseleave", this.myMouseLeave)
-	      
-	       node.attr("cx", 
-					function (d){ 
-	    		 				
-	    		 				return thisContext.getAVal( d,true)
-	    		 			}
-	    		 		)
-	      	.attr("cy", 
-	      			
-					function (d){
-	      						
-	      					return thisContext.getAVal( d,false)}
-				)
-	    
-	      
-	      if( graphType == "ForceTree"  )
-	      {
-	      		node.call(force.drag);
-	      }
-	      	
-	      function updateNodesLinksText()
-	      {
-	    	  //console.log("tick " + dragging);
-	    	  
-	    	  if( ! animationOn && ( stopOnChild == true || dragging == true))
-		  		{
-		  			var dataset = thisContext.getDisplayDataset();
-		  			
-		  			for( var x=0; x < dataset.nodes.length; x++)
-		  			{
-		  				if( ! dataset.nodes[x].userMoved )
-		  				{
-			  				dataset.nodes[x].x = dataset.nodes[x].parentDataNode.xMap[thisID]
-			  				dataset.nodes[x].y = dataset.nodes[x].parentDataNode.yMap[thisID]			  				
-		  				}
-		  				
-		  				if( animationOn == false)
-		  					dataset.nodes[x].fixed = true;
-		  			}
-		  			
-		  		  if( force && animationOn == false  && dragging == false)
-	    			  force.stop();
-	    		  
-		  		  if( stopOnChild == true)
-		  			  stopOnChild=false;
+    if( ! initHasRun )
+        return;
+    
+    if( dirty ) 
+    {
+        if( animationOn == false && stopOnChild == false)
+        {
+            dataset = thisContext.getDisplayDataset();
+            for( var x=0; x < dataset.nodes.length; x++)
+            {
+                if( ! dataset.nodes[x].userMoved )
+                {
+                    dataset.nodes[x].x = dataset.nodes[x].parentDataNode.xMap[thisID]
+                    dataset.nodes[x].y = dataset.nodes[x].parentDataNode.yMap[thisID]                           
+                }
+            }
+        }
+        
+            
+        
+        dirty = false;
+        var anyLabels = false;
+        
+        for( var x=0; x<= statics.getMaxLevel(); x++ )
+        {
+            circleDraws[x] = "";
+        }
+        
+        
+        for( var x=0; ! anyLabels && x < statics.getLabelCheckBoxes().length; x++)
+        {
+            var aCheckBox = aDocument.getElementById(statics.getLabelCheckBoxes()[x]);
+            
+            if( aCheckBox != null) 
+                anyLabels = aCheckBox.checked
+        }
+        
+        var noiseValue = aDocument.getElementById("noiseSlider").value;
+        
+        var numMarked =0;
+        var numVisible=0;
+        for (var i = 0; i < nodes.length; i++)
+        {
+            nodes[i].marked= false;
+            if( ! nodes[i].doNotShow &&  nodes[i].setVisible== true) 
+            {
+                nodes[i].marked = true;
+                numVisible++;
+                
+                if( nodes[i].children != null) 
+                {
+                    for( var j=0; nodes[i].marked && j < nodes[i].children.length; j++ ) 
+                    {
+                        if( ! nodes[i].children[j].doNotShow )
+                        {
+                            nodes[i].marked=false;
+                        }
+                    }
+                }
+                
+                if( nodes[i].marked == true) 
+                    numMarked = numMarked + 1
+            }
+            
+            if( addNoise )
+            {
+                if( firstNoise)
+                {
+                    nodes[i].xMapNoise  = nodes[i].xMap[thisID];
+                    nodes[i].yMapNoise  = nodes[i].yMap[thisID];
+                }
+                else
+                {
+                    nodes[i].xMap[thisID]=nodes[i].xMapNoise ;
+                    nodes[i].yMap[thisID]= nodes[i].yMapNoise;
+                    
+                }
+            
+                var noiseX = 0.1 * nodes[i].xMap[thisID]* Math.random() * (noiseValue/100);
+                var noiseY = 0.1 * nodes[i].yMap[thisID]* Math.random() * (noiseValue/100);
+                
+                if( Math.random() < 0.5) 
+                    noiseX = -noiseX;
+                    
+                if( Math.random() < 0.5) 
+                    noiseY = -noiseY;
+                    
+                nodes[i].xMap[thisID] += noiseX;
+                nodes[i].yMap[thisID] += noiseY;
+                
+            }
+        }
+        
+        if( addNoise) 
+            firstNoise = false;
+        
+        for (var i = 0; i < nodes.length; i++)
+        {
+            nodes[i].thisNodeColor = this.color(nodes[i]);
+            nodes[i].thisNodeRadius = this.getRadiusVal(nodes[i]);
+        }   
+        
+        var filteredNodes = thisContext.getDisplayDataset().nodes.filter(thisContext.myFilterNodes)
+        vis.selectAll("text").remove();
+        
+    
+    // Restart the force layout.
+     
+     if( graphType == "ForceTree"  ) 
+     {
+        force.nodes(filteredNodes);
+          
+        if(! aDocument.getElementById("hideLinks").checked )
+        {
+            links = d3.layout.tree().links(filteredNodes);
+            force.links(links)  
+        }
+        else
+        {
+            links = d3.layout.tree().links([]);
+            force.links(links);
+        }
+        
+        
+        if(stopOnChild == true || animationOn == true)
+            force.start().gravity(aDocument.getElementById("gravitySlider").value/100);
+     }
+     
+      var node = vis.selectAll("circle.node")
+          .data(filteredNodes, function(d) {return d.name; } )
+          .style("fill", function(d) { return d.parentDataNode.thisNodeColor} )
+          .style("opacity",aDocument.getElementById("opacitySlider").value/100 );
+    
+    
+      // Enter any new nodes.
+     node.enter().append("svg:circle").on("click", this.myClick)
+          .attr("class", "node")
+          .attr("r", function(d) {  return d.parentDataNode.thisNodeRadius})
+          .style("fill", function(d) { return d.parentDataNode.thisNodeColor}).
+          style("opacity",aDocument.getElementById("opacitySlider").value/100 ) 
+         .on("mouseenter", this.myMouseEnter)
+          .on("mouseleave", this.myMouseLeave)
+          
+           node.attr("cx", 
+                    function (d){ 
+                                
+                                return thisContext.getAVal( d,true)
+                            }
+                        )
+            .attr("cy", 
+                    
+                    function (d){
+                                
+                            return thisContext.getAVal( d,false)}
+                )
+        
+          
+          if( graphType == "ForceTree"  )
+          {
+                node.call(force.drag);
+          }
+            
+          function updateNodesLinksText()
+          {
+              //console.log("tick " + dragging);
+              
+              if( ! animationOn && ( stopOnChild == true || dragging == true))
+                {
+                    var dataset = thisContext.getDisplayDataset();
+                    
+                    for( var x=0; x < dataset.nodes.length; x++)
+                    {
+                        if( ! dataset.nodes[x].userMoved )
+                        {
+                            dataset.nodes[x].x = dataset.nodes[x].parentDataNode.xMap[thisID]
+                            dataset.nodes[x].y = dataset.nodes[x].parentDataNode.yMap[thisID]                           
+                        }
+                        
+                        if( animationOn == false)
+                            dataset.nodes[x].fixed = true;
+                    }
+                    
+                  if( force && animationOn == false  && dragging == false)
+                      force.stop();
+                  
+                  if( stopOnChild == true)
+                      stopOnChild=false;
 
-		  		}
-		  		
-	    	 node.attr("cx", 
-					function (d){ 
-	    		 				
-	    		 				return thisContext.getAVal( d,true)
-	    		 			}
-	    		 		)
-	      	.attr("cy", 
-	      			
-					function (d){
-	      						
-	      					return thisContext.getAVal( d,false)}
-				)
-	    
-		  if ( anyLabels )
-	      {	
-	      	if( graphType == "ForceTree" ) 
-	      	{
-	      		
-	      	text.attr("transform", function(d) { return "translate(" + 
-						d.x
-							+ "," + d.y+ ")"; });
-			
-	      	}
-	      	else
-	      	{
-	      		/* radial labels: todo: this should be an option
+                }
+                
+             node.attr("cx", 
+                    function (d){ 
+                                
+                                return thisContext.getAVal( d,true)
+                            }
+                        )
+            .attr("cy", 
+                    
+                    function (d){
+                                
+                            return thisContext.getAVal( d,false)}
+                )
+        
+          if ( anyLabels )
+          { 
+            if( graphType == "ForceTree" ) 
+            {
+                
+            text.attr("transform", function(d) { return "translate(" + 
+                        d.x
+                            + "," + d.y+ ")"; });
+            
+            }
+            else
+            {
+                /* radial labels: todo: this should be an option
 >>>>>>> 09fee4649ee5405fb24f402ec6f4e327726e277c
-	      		console.log("set rotate " + Math.PI *
-	      				d.listPosition / statics.getNodes().length);
-	      		text.attr("transform", function(d) { return "rotate(" + Math.PI *
-	      				d.listPosition / statics.getNodes().length
-	      					+ ")"});
-	      					*/
+                console.log("set rotate " + Math.PI *
+                        d.listPosition / statics.getNodes().length);
+                text.attr("transform", function(d) { return "rotate(" + Math.PI *
+                        d.listPosition / statics.getNodes().length
+                            + ")"});
+                            */
 
                          text.attr("transform", function(d) {
                              return "translate(" +
@@ -1915,6 +1936,7 @@ this.update = function()
                      }
                  }
 
+                 //if a forcetree and hide links isn't checked, set link coordinates
                  if (graphType == "ForceTree" && !aDocument.getElementById("hideLinks").checked) {
                      link.attr("x1", function(d) {
                          return d.source.x;
@@ -1937,6 +1959,7 @@ this.update = function()
                  (thisDocument.getElementById("scatterY").value == "circleX" || thisDocument.getElementById("scatterY").value == "circleY"))) {
                  var depth = 0;
 
+                 //Function to add node and its children to the vis (recursively)
                  function addNodeAndChildren(aNode) {
                      depth++;
                      if (!aNode.doNotShow && aNode.children && aNode.children.length > 0) {
@@ -1958,20 +1981,22 @@ this.update = function()
                      depth--;
                  }
 
-
+                 //add node and children to the root
                  addNodeAndChildren(statics.getRoot());
 
-             } else if (graphType != "ForceTree") {
+             }
+             //if the graph is not a force tree, remove all lines
+             else if (graphType != "ForceTree") {
                  vis.selectAll("line").remove();
              }
 
-
+             //if the graph is a force tree, update the node-link text on ticks of the force layout
              if (graphType == "ForceTree")
                  force.on("tick", updateNodesLinksText);
 
              //force.on("end", updateNodesLinksText);
 
-             // Update the links	      	
+             // Update the links            
              if (graphType == "ForceTree" && !aDocument.getElementById("hideLinks").checked) {
                  link = vis.selectAll("line.link")
                      .data(links.filter(this.myFilterLinks), function(d) {
@@ -1984,6 +2009,7 @@ this.update = function()
 
              // Enter any new links.
              //vis.remove("svg:line");
+             //If the graph is a force tree and hide links isn't checked, enter any new links
              if (graphType == "ForceTree" && !aDocument.getElementById("hideLinks").checked)
                  link.enter().insert("svg:line", ".node")
                      .attr("class", "link")
@@ -1995,7 +2021,6 @@ this.update = function()
              var row = table.rows[1];
              var cell = row.cells[1];
              cell.innerHTML = "" + numMarked;
-
 
              for (var x = 0; x < nodes.length; x++) {
                  nodes[x].nodeLabelText = this.getLabelText(nodes[x]);
@@ -2025,20 +2050,20 @@ this.update = function()
                              })
 
                      /* todo: radial labels should be an option
-  						.attr("transform", 
-  	         				 	function(d) 
-  	         				 	{ 
-  									var anAngle = 360.0 *  
-       			 					d.listPosition / (Math.PI *statics.getNodes().length);
-  									
-  									console.log( anAngle);
-  									
-  	         			 			return "rotate(" + anAngle + "," 
-  	         			 					+ thisContext.getAVal( d,true)
-  												+ "," + thisContext.getAVal( d,false) + ")"
-  	         			         }
-  	         		         );
-  	         		         */
+                        .attr("transform", 
+                                function(d) 
+                                { 
+                                    var anAngle = 360.0 *  
+                                    d.listPosition / (Math.PI *statics.getNodes().length);
+                                    
+                                    console.log( anAngle);
+                                    
+                                    return "rotate(" + anAngle + "," 
+                                            + thisContext.getAVal( d,true)
+                                                + "," + thisContext.getAVal( d,false) + ")"
+                                 }
+                             );
+                             */
                  } else {
                      text.attr("dx", function(d) {
                          return 15;
@@ -2079,7 +2104,7 @@ this.update = function()
          firstUpdate = false;
      }
 
-
+     //Function to release everything that is "fixed"
      this.releaseAllFixed = function() {
          var displayNodes = this.getDisplayDataset().nodes;
 
@@ -2101,6 +2126,7 @@ this.update = function()
      }
 
 
+     //Function to get the text color
      this.getTextColor = function(d) {
          if (aDocument.getElementById("textIsBlack").checked)
              return "#000000";
@@ -2112,7 +2138,7 @@ this.update = function()
 
      }
 
-
+     //Function for when the mouse enters
      this.myMouseEnter = function(d) {
          if (force && animationOn == false && dragging == false)
              force.stop();
@@ -2154,6 +2180,7 @@ this.update = function()
          thisContext.redrawScreen();
      }
 
+     //Function for when the mouse leaves
      this.myMouseLeave = function() {
          if (force && animationOn == false && dragging == false)
              force.stop();
@@ -2170,11 +2197,13 @@ this.update = function()
          thisContext.redrawScreen();
      }
 
+     //Function to set the initial positions of the force plot
      this.setInitialPositions = function() {
          if (animationOn == false)
              this.arrangeForcePlot(false);
      }
 
+     //Function to arrange the nodess of the force plot
      this.arrangeForcePlot = function(arrangeChildren) {
          var topNode = statics.getRoot();
 
@@ -2272,7 +2301,7 @@ this.update = function()
 
      }
 
-
+     //Function to initialize everything
      this.initialize = function() {
 
          this.flatten();
@@ -2294,6 +2323,7 @@ this.update = function()
          this.redrawScreen();
      }
 
+     //Function to get a quantitative color
      this.getQuantiativeColor = function(d) {
          var chosen = aDocument.getElementById("colorByWhat").value;
 
@@ -2328,7 +2358,7 @@ this.update = function()
 
      }
 
-
+     //Function to get a color
      this.color = function(d) {
          if (d.highlight == true)
              return "#fd8d3c"; // orange
@@ -2383,6 +2413,7 @@ this.update = function()
          thisContext.update();
      }
 
+     //Function to hide and show nodes
      this.hideAndShow = function(d) {
          if (!d)
              d = statics.getHighlightedNode();
@@ -2403,7 +2434,7 @@ this.update = function()
          }
      }
 
-
+     //Function to highlight all children
      this.highlightAllChildren = function(d) {
          if (d == null)
              return;
@@ -2418,6 +2449,7 @@ this.update = function()
          }
      }
 
+     //Function to highlight all parents
      this.highlightAllParents = function(d) {
          if (d == null)
              return;

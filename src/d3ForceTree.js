@@ -884,7 +884,7 @@
         aBox = aDocument.getElementById("logColor").enabled=true;
     }
     */
-         << << << < HEAD
+         // << << << < HEAD
 
          dirty = true;
          this.update()
